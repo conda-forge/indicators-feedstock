@@ -1,5 +1,5 @@
 {% set name = "indicators" %}
-{% set version = "1.7" %}
+{% set version = "1.8" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/p-ranav/indicators/archive/v{{ version }}.tar.gz
-  sha256: dfbfa4804a7bbcb07c35ff81a0c467135eaf0933eb8827f83fd969be19a0d273
+  sha256: 7588b10c5d877c6377a6ae7168180993ad87db72ff14a7dc359fb57c5de1976c
 
 build:
   number: 0
@@ -28,8 +28,7 @@ about:
   home: https://github.com/p-ranav/indicators
   license: MIT
   license_file: LICENSE
-  summary: 'Indicators is a header-only library that introduces highly personalizible
-            progress bars.'
+  summary: Indicators is a header-only library that introduces highly personalizible progress bars.
 
 extra:
   recipe-maintainers:
