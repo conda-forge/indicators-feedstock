@@ -1,5 +1,5 @@
 {% set name = "indicators" %}
-{% set version = "2.1" %}
+{% set version = "2.2" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/p-ranav/indicators/archive/v{{ version }}.tar.gz
-  sha256: 37e60a6b27460b0ade086a8515ad920919ffc43ed8935af1aaa95c48e3284c34
+  sha256: b768f1b7ca64a413503f72d5460cc617c1458c17fb7a8c0ee503d753e1f20d03
 
 build:
   number: 0
