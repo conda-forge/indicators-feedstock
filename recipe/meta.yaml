@@ -10,7 +10,7 @@ source:
   sha256: 70da7a693ff7a6a283850ab6d62acf628eea17d386488af8918576d0760aef7b
 
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
@@ -36,3 +36,6 @@ extra:
     - SylvainCorlay
     - wolfv
     - marimeireles
+  additional-platforms:
+    - linux-aarch64
+    - osx-arm64
