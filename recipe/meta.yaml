@@ -8,9 +8,11 @@ package:
 source:
   url: https://github.com/p-ranav/indicators/archive/v{{ version }}.tar.gz
   sha256: 70da7a693ff7a6a283850ab6d62acf628eea17d386488af8918576d0760aef7b
+  patches:
+    - patches/0001-Add-missing-cstdint-header.patch
 
 build:
-  number: 1
+  number: 2
 
 requirements:
   build:
@@ -20,6 +22,12 @@ requirements:
     - make  # [unix]
 
 test:
+  requires:
+    - {{ compiler("cxx") }}
+    - cmake
+    - make  # [unix]
+  files:
+    - tests/
   commands:
     - test -d ${PREFIX}/include/indicators  # [unix]
     - test -f ${PREFIX}/include/indicators/progress_bar.hpp  # [unix]

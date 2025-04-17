@@ -1,0 +1,37 @@
+From 114f76d7a80e1ce91f0389edfa63d3178ea7a7ce Mon Sep 17 00:00:00 2001
+From: Jeongseok Lee <jeongseok@meta.com>
+Date: Wed, 16 Apr 2025 15:28:13 -0700
+Subject: [PATCH] Add missing <cstdint> header
+
+---
+ include/indicators/termcolor.hpp         | 1 +
+ single_include/indicators/indicators.hpp | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/include/indicators/termcolor.hpp b/include/indicators/termcolor.hpp
+index 3e82bdc..94d9483 100644
+--- a/include/indicators/termcolor.hpp
++++ b/include/indicators/termcolor.hpp
+@@ -13,6 +13,7 @@
+ #define TERMCOLOR_HPP_
+ 
+ #include <iostream>
++#include <cstdint>
+ #include <cstdio>
+ 
+ // Detect target's platform and set some macros in order to wrap platform
+diff --git a/single_include/indicators/indicators.hpp b/single_include/indicators/indicators.hpp
+index c961a93..8aa6012 100644
+--- a/single_include/indicators/indicators.hpp
++++ b/single_include/indicators/indicators.hpp
+@@ -45,6 +45,7 @@ enum class ProgressType { incremental, decremental };
+ #define TERMCOLOR_HPP_
+ 
+ #include <iostream>
++#include <cstdint>
+ #include <cstdio>
+ 
+ // Detect target's platform and set some macros in order to wrap platform
+-- 
+2.39.5 (Apple Git-154)
+
