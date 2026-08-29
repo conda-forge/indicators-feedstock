@@ -1,0 +1,71 @@
+schema_version: 1
+
+context:
+  name: indicators
+  version: "2.3"
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  url: https://github.com/p-ranav/indicators/archive/v${{ version }}.tar.gz
+  sha256: 70da7a693ff7a6a283850ab6d62acf628eea17d386488af8918576d0760aef7b
+  patches:
+    # Fixed on upstream master after v2.3; remove with the next release.
+    - patches/0001-Add-missing-cstdint-header.patch
+
+build:
+  number: 3
+  script:
+    - if: unix
+      then: bash "${RECIPE_DIR}/build.sh"
+    - if: win
+      then: call "%RECIPE_DIR%\\build.bat"
+
+requirements:
+  build:
+    - ${{ compiler('cxx') }}
+    - ${{ stdlib('c') }}
+    - cmake
+    - if: unix
+      then: make
+
+tests:
+  - requirements:
+      run:
+        - ${{ compiler('cxx') }}
+        - ${{ stdlib('c') }}
+        - cmake
+        - if: unix
+          then: make
+    files:
+      recipe:
+        - run_test.bat
+        - run_test.sh
+        - tests/
+    script:
+      - if: unix
+        then:
+          - test -d "${PREFIX}/include/indicators"
+          - test -f "${PREFIX}/include/indicators/progress_bar.hpp"
+          - bash run_test.sh
+      - if: win
+        then:
+          - if not exist "%LIBRARY_PREFIX%\\include\\indicators\\progress_bar.hpp" exit 1
+          - call run_test.bat
+
+about:
+  homepage: https://github.com/p-ranav/indicators
+  repository: https://github.com/p-ranav/indicators
+  summary: Indicators is a header-only library that provides highly customizable progress bars.
+  license: MIT
+  license_file: LICENSE
+
+extra:
+  feedstock-name: indicators
+  recipe-maintainers:
+    - p-ranav
+    - SylvainCorlay
+    - wolfv
+    - marimeireles
