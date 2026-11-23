@@ -1,0 +1,82 @@
+schema_version: 1
+
+context:
+  name: indicators
+  version: "2.3"
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  url: https://github.com/p-ranav/indicators/archive/v${{ version }}.tar.gz
+  sha256: 70da7a693ff7a6a283850ab6d62acf628eea17d386488af8918576d0760aef7b
+  patches:
+    # Fixed on upstream master after v2.3; remove with the next release.
+    - patches/0001-Add-missing-cstdint-header.patch
+
+build:
+  number: 3
+  script:
+    - cmake -G Ninja ${{ "%CMAKE_ARGS%" if win else "$CMAKE_ARGS" }} -B build -S . -DCMAKE_BUILD_TYPE=Release
+    - cmake --install build
+
+requirements:
+  build:
+    - ${{ compiler('cxx') }}
+    - ${{ stdlib('c') }}
+    - cmake
+    - ninja
+  ignore_run_exports:
+    # header-only library, nothing is linked at build time
+    from_package:
+      - ${{ compiler('cxx') }}
+      - ${{ stdlib('c') }}
+
+tests:
+  - package_contents:
+      include:
+        - indicators/progress_bar.hpp
+        - indicators/block_progress_bar.hpp
+        - indicators/progress_spinner.hpp
+        - indicators/multi_progress.hpp
+        - indicators/dynamic_progress.hpp
+      files:
+        - ${{ "Library/" if win }}lib/cmake/indicators/indicatorsConfig.cmake
+        - ${{ "Library/" if win }}lib/cmake/indicators/indicatorsConfigVersion.cmake
+        - ${{ "Library/" if win }}lib/cmake/indicators/indicatorsTargets.cmake
+        - ${{ "Library/" if win }}lib/pkgconfig/indicators.pc
+  - files:
+      recipe:
+        - tests/
+    requirements:
+      run:
+        - ${{ compiler('cxx') }}
+        - ${{ stdlib('c') }}
+        - cmake
+        - ninja
+    script:
+      - cmake -G Ninja ${{ "%CMAKE_ARGS%" if win else "$CMAKE_ARGS" }} -B build -S tests -DCMAKE_BUILD_TYPE=Release
+      - cmake --build build
+      - ${{ "build\\demo.exe" if win else "./build/demo" }}
+
+about:
+  homepage: https://github.com/p-ranav/indicators
+  repository: https://github.com/p-ranav/indicators
+  summary: Activity indicators and progress bars for modern C++
+  description: |
+    Indicators is a header-only C++11 library that provides thread-safe,
+    highly customizable progress bars, block progress bars, spinners and
+    multi/dynamic progress displays for terminal applications.
+  license: MIT
+  license_file:
+    - LICENSE
+    - LICENSE.termcolor
+
+extra:
+  feedstock-name: indicators
+  recipe-maintainers:
+    - p-ranav
+    - SylvainCorlay
+    - wolfv
+    - marimeireles
