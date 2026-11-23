@@ -7,9 +7,13 @@ Home: https://github.com/p-ranav/indicators
 
 Package license: MIT
 
-Summary: Indicators is a header-only library that provides highly customizable progress bars.
+Summary: Activity indicators and progress bars for modern C++
 
 Development: https://github.com/p-ranav/indicators
+
+Indicators is a header-only C++11 library that provides thread-safe,
+highly customizable progress bars, block progress bars, spinners and
+multi/dynamic progress displays for terminal applications.
 
 Current build status
 ====================
