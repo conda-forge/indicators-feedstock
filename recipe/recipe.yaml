@@ -17,45 +17,61 @@ source:
 
 build:
   number: 3
+  script:
+    - cmake -G Ninja ${{ "%CMAKE_ARGS%" if win else "$CMAKE_ARGS" }} -B build -S . -DCMAKE_BUILD_TYPE=Release
+    - cmake --install build
 
 requirements:
   build:
     - ${{ compiler('cxx') }}
     - ${{ stdlib('c') }}
     - cmake
-    - if: unix
-      then: make
+    - ninja
+  ignore_run_exports:
+    # header-only library, nothing is linked at build time
+    from_package:
+      - ${{ compiler('cxx') }}
+      - ${{ stdlib('c') }}
 
 tests:
-  - requirements:
+  - package_contents:
+      include:
+        - indicators/progress_bar.hpp
+        - indicators/block_progress_bar.hpp
+        - indicators/progress_spinner.hpp
+        - indicators/multi_progress.hpp
+        - indicators/dynamic_progress.hpp
+      files:
+        - ${{ "Library/" if win }}lib/cmake/indicators/indicatorsConfig.cmake
+        - ${{ "Library/" if win }}lib/cmake/indicators/indicatorsConfigVersion.cmake
+        - ${{ "Library/" if win }}lib/cmake/indicators/indicatorsTargets.cmake
+        - ${{ "Library/" if win }}lib/pkgconfig/indicators.pc
+  - files:
+      recipe:
+        - tests/
+    requirements:
       run:
         - ${{ compiler('cxx') }}
         - ${{ stdlib('c') }}
         - cmake
-        - if: unix
-          then: make
-    files:
-      recipe:
-        - run_test.bat
-        - run_test.sh
-        - tests/
+        - ninja
     script:
-      - if: unix
-        then:
-          - test -d "${PREFIX}/include/indicators"
-          - test -f "${PREFIX}/include/indicators/progress_bar.hpp"
-          - bash run_test.sh
-      - if: win
-        then:
-          - if not exist "%LIBRARY_PREFIX%\\include\\indicators\\progress_bar.hpp" exit 1
-          - call run_test.bat
+      - cmake -G Ninja ${{ "%CMAKE_ARGS%" if win else "$CMAKE_ARGS" }} -B build -S tests -DCMAKE_BUILD_TYPE=Release
+      - cmake --build build
+      - ${{ "build\\demo.exe" if win else "./build/demo" }}
 
 about:
   homepage: https://github.com/p-ranav/indicators
   repository: https://github.com/p-ranav/indicators
-  summary: Indicators is a header-only library that provides highly customizable progress bars.
+  summary: Activity indicators and progress bars for modern C++
+  description: |
+    Indicators is a header-only C++11 library that provides thread-safe,
+    highly customizable progress bars, block progress bars, spinners and
+    multi/dynamic progress displays for terminal applications.
   license: MIT
-  license_file: LICENSE
+  license_file:
+    - LICENSE
+    - LICENSE.termcolor
 
 extra:
   feedstock-name: indicators
